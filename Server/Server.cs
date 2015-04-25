@@ -113,8 +113,17 @@ public class AsynchronousSocketListener {
                 // client. Display it on the console.
                 Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
                     content.Length, content );
+                Console.WriteLine("\n\n");
                 // Echo the data back to the client.
                 Send(handler, content);
+
+                // Setup a new state object
+                StateObject newstate = new StateObject();
+                newstate.workSocket = handler;
+
+                // Call BeginReceive with a new state object
+                handler.BeginReceive(newstate.buffer, 0, StateObject.BufferSize, 0,
+                new AsyncCallback(ReadCallback), newstate);
             } else {
                 // Not all data received. Get more.
                 handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
@@ -140,10 +149,6 @@ public class AsynchronousSocketListener {
             // Complete sending the data to the remote device.
             int bytesSent = handler.EndSend(ar);
             Console.WriteLine("Sent {0} bytes to client.", bytesSent);
-
-            handler.Shutdown(SocketShutdown.Both);
-            handler.Close();
-
         } catch (Exception e) {
             Console.WriteLine(e.ToString());
         }
