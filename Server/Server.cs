@@ -19,7 +19,7 @@ public class StateObject {
 
 public class AsynchronousSocketListener {
     // Thread signal.
-    public static ManualResetEvent allDone = new ManualResetEvent(false);
+    public static AutoResetEvent allDone = new ManualResetEvent(false);
 	public static List<Socket> clients = new List<Socket>();
 
     public AsynchronousSocketListener() {
@@ -47,9 +47,6 @@ public class AsynchronousSocketListener {
             listener.Listen(100);
 
             while (true) {
-                // Set the event to nonsignaled state.
-                allDone.Reset();
-
                 // Start an asynchronous socket to listen for connections.
 				Console.WriteLine("Waiting for a connection..");
                 listener.BeginAccept( 

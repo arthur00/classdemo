@@ -15,14 +15,14 @@ public class StateObject {
     // Received data string.
     public StringBuilder sb = new StringBuilder();
     // ManualResetEvent instances signal completion.
-    public ManualResetEvent connectDone =
-        new ManualResetEvent(false);
+    public AutoResetEvent connectDone =
+        new AutoResetEvent(false);
 
-    public ManualResetEvent receiveDone =
-        new ManualResetEvent(false);
+    public AutoResetEvent receiveDone =
+        new AutoResetEvent(false);
 
-    public ManualResetEvent sendDone =
-        new ManualResetEvent(false);
+    public AutoResetEvent sendDone =
+        new AutoResetEvent(false);
 
     // The response from the remote device.
     public String response = String.Empty;
@@ -41,7 +41,7 @@ public class AsynchronousClient {
             // The name of the 
             // remote device is "host.contoso.com".
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[2];
+            IPAddress ipAddress = ipHostInfo.AddressList[0];
             IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
             // Create a TCP/IP socket.
@@ -61,6 +61,15 @@ public class AsynchronousClient {
             Send(client,"This is a test<EOF>", send_so);
             send_so.sendDone.WaitOne(5000);
 
+			// Send test data to the remote device.
+            Send(client,"Test 2<EOF>", send_so);
+            send_so.sendDone.WaitOne(5000);
+
+			// Send test data to the remote device.
+            Send(client,"Test 3<EOF>", send_so);
+            send_so.sendDone.WaitOne(5000);
+
+            
             // Receive the response from the remote device.
             // Create the state object for receiving.
             StateObject recv_so = new StateObject();
