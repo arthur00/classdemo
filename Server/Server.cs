@@ -19,7 +19,7 @@ public class StateObject {
 
 public class AsynchronousSocketListener {
     // Thread signal.
-    public static AutoResetEvent allDone = new ManualResetEvent(false);
+    public static AutoResetEvent allDone = new AutoResetEvent(false);
 	public static List<Socket> clients = new List<Socket>();
 
     public AsynchronousSocketListener() {
@@ -36,7 +36,9 @@ public class AsynchronousSocketListener {
 		//Listen to external IP address
 		IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
 		IPAddress ipAddress = ipHostInfo.AddressList[0];
+        //ipAddress = IPAddress.Parse("127.0.0.1");
 		IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
+        Console.WriteLine("IPAddress: " + ipAddress.ToString());
 
 		// Listen to any IP Address
 		IPEndPoint any = new IPEndPoint(IPAddress.Any, 11000);

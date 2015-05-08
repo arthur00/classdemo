@@ -1,2 +1,6 @@
 *.exe
 *.mdb
+*.pdb
+obj/
+*.manifest
+*.userprefs
